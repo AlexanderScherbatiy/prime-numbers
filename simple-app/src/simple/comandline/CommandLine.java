@@ -4,7 +4,9 @@ package simple.comandline;
 import java.util.List;
 import java.util.Scanner;
 
-import simple.primenumber.PrimeNumbers;
+import simple.primenumber.PrimeNumberModule;
+import simple.primenumber.PrimeNumberModule.Pair;
+import simple.primenumber.local.LocalPrimeNumberModule;
 
 /**
  * Created by alexsch on 2/15/2017.
@@ -31,7 +33,7 @@ public class CommandLine {
 
     public static void main(String[] args) {
 
-        PrimeNumbers primeNumbers = new PrimeNumbers();
+        PrimeNumberModule primeNumberModule = new LocalPrimeNumberModule();
         System.out.println(WELCOME);
         showCommands();
         Scanner in = new Scanner(System.in);
@@ -42,9 +44,14 @@ public class CommandLine {
 
             try {
                 int i = Integer.valueOf(command);
-                if (i >= 0 && i < COMMANDS.length) {
-                    command = COMMANDS[i];
+                if (i < 0 || i >= COMMANDS.length) {
+                    System.out.printf("command %d is out of range.\n", i);
+                    continue;
                 }
+
+                command = COMMANDS[i];
+                System.out.printf("> %d) %s\n", i, command);
+
             } catch (NumberFormatException e) {
                 // not a command
             }
@@ -55,26 +62,25 @@ public class CommandLine {
                     showCommands();
                     break;
                 case LAST_PRIME_NUMBER:
-                    PrimeNumbers.Pair lastPrimeNumber = primeNumbers.getLastPrimeNumber();
+                    Pair lastPrimeNumber = primeNumberModule.getLastPrimeNumbers(1).get(0);
                     System.out.printf("last %s\n", lastPrimeNumber);
                     break;
 
                 case LAST_PRIME_NUMBERS:
-                    List<PrimeNumbers.Pair> lastPrimeNumbers =
-                            primeNumbers.getLastPrimeNumbers(10);
-
-                    for (PrimeNumbers.Pair pair : lastPrimeNumbers) {
+                    List<Pair> lastPrimeNumbers =
+                            primeNumberModule.getLastPrimeNumbers(10);
+                    for (Pair pair : lastPrimeNumbers) {
                         System.out.println(pair);
                     }
                     break;
                 case RUN:
-                    primeNumbers.run(true);
+                    primeNumberModule.run(true);
                     break;
                 case PAUSE:
-                    primeNumbers.run(false);
+                    primeNumberModule.run(false);
                     break;
                 case EXIT:
-                    primeNumbers.shutdown();
+                    primeNumberModule.shutdown();
                     break mainLoop;
                 default:
                     System.out.printf("Unknown command: '%s'\n", command);

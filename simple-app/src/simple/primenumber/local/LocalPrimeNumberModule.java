@@ -1,4 +1,6 @@
-package simple.primenumber;
+package simple.primenumber.local;
+
+import simple.primenumber.PrimeNumberModule;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -9,14 +11,14 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by alexsch on 2/15/2017.
  */
-public class PrimeNumbers {
+public class LocalPrimeNumberModule implements PrimeNumberModule {
 
     private final Lock lock = new ReentrantLock();
     private volatile boolean run = false;
     private volatile boolean shutdown = false;
     private List<Integer> primes = new ArrayList<>();
 
-    public PrimeNumbers() {
+    public LocalPrimeNumberModule() {
         new Thread(new PrimeNumbersCalculator()).start();
     }
 
@@ -51,29 +53,6 @@ public class PrimeNumbers {
             return lastPrimeNumbers;
         } finally {
             lock.unlock();
-        }
-    }
-
-    public class Pair {
-        private final int num;
-        private final int prime;
-
-        public Pair(int num, int prime) {
-            this.num = num;
-            this.prime = prime;
-        }
-
-        public int getNum() {
-            return num;
-        }
-
-        public int getPrime() {
-            return prime;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("prime number[%d] = %d", num, prime);
         }
     }
 
