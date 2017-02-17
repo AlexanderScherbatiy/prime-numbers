@@ -3,15 +3,20 @@ package simple.primenumber;
 import java.util.List;
 
 /**
- * Created by alexsch on 2/16/2017.
+ * Created by alexsch on 2/17/2017.
  */
-public interface PrimeNumberModule {
+public interface PrimeNumberStorage {
 
-    void run(boolean flag);
+    void addPrimeNumber(int prime);
 
-    void shutdown();
+    List<Integer> getPrimeNumbers();
+
+    int getPrimNumbersCount();
+
+    Pair getLastPrimeNumber();
 
     List<Pair> getLastPrimeNumbers(int number);
+
 
     public class Pair {
         private final int index;

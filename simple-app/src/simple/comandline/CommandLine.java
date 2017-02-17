@@ -4,9 +4,11 @@ package simple.comandline;
 import java.util.List;
 import java.util.Scanner;
 
-import simple.primenumber.PrimeNumberModule;
-import simple.primenumber.PrimeNumberModule.Pair;
-import simple.primenumber.local.LocalPrimeNumberModule;
+import simple.primenumber.PrimeNumberStorage;
+import simple.primenumber.PrimeNumberStorage.Pair;
+import simple.primenumber.PrimeNumberCalculator;
+import simple.primenumber.local.LocalPrimeNumberStorage;
+import simple.primenumber.local.LocalPrimeNumberCalculator;
 
 /**
  * Created by alexsch on 2/15/2017.
@@ -33,7 +35,9 @@ public class CommandLine {
 
     public static void main(String[] args) {
 
-        PrimeNumberModule primeNumberModule = new LocalPrimeNumberModule();
+        PrimeNumberStorage storage = new LocalPrimeNumberStorage();
+        PrimeNumberCalculator calculator = new LocalPrimeNumberCalculator();
+        calculator.setStorage(storage);
         System.out.println(WELCOME);
         showCommands();
         Scanner in = new Scanner(System.in);
@@ -62,25 +66,25 @@ public class CommandLine {
                     showCommands();
                     break;
                 case LAST_PRIME_NUMBER:
-                    Pair lastPrimeNumber = primeNumberModule.getLastPrimeNumbers(1).get(0);
+                    Pair lastPrimeNumber = storage.getLastPrimeNumber();
                     System.out.printf("last %s\n", lastPrimeNumber);
                     break;
 
                 case LAST_PRIME_NUMBERS:
                     List<Pair> lastPrimeNumbers =
-                            primeNumberModule.getLastPrimeNumbers(10);
+                            storage.getLastPrimeNumbers(10);
                     for (Pair pair : lastPrimeNumbers) {
                         System.out.println(pair);
                     }
                     break;
                 case RUN:
-                    primeNumberModule.run(true);
+                    calculator.run(true);
                     break;
                 case PAUSE:
-                    primeNumberModule.run(false);
+                    calculator.run(false);
                     break;
                 case EXIT:
-                    primeNumberModule.shutdown();
+                    calculator.shutdown();
                     break mainLoop;
                 default:
                     System.out.printf("Unknown command: '%s'\n", command);
