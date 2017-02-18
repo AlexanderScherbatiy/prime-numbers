@@ -7,37 +7,37 @@ import java.util.List;
  */
 public interface PrimeNumberStorage {
 
-    void addPrimeNumber(int prime);
+    void addPrimeNumber(int primeNumber);
 
     List<Integer> getPrimeNumbers();
 
     int getPrimNumbersCount();
 
-    Pair getLastPrimeNumber();
+    PrimeNumberItem getLastPrimeNumberItem();
 
-    List<Pair> getLastPrimeNumbers(int number);
+    List<PrimeNumberItem> getLastPrimeNumberItems(int number);
 
 
-    public class Pair {
+    public class PrimeNumberItem {
         private final int index;
-        private final int prime;
+        private final int primeNumber;
 
-        public Pair(int index, int prime) {
+        public PrimeNumberItem(int index, int primeNumber) {
             this.index = index;
-            this.prime = prime;
+            this.primeNumber = primeNumber;
         }
 
         public int getIndex() {
             return index;
         }
 
-        public int getPrime() {
-            return prime;
+        public int getPrimeNumber() {
+            return primeNumber;
         }
 
         @Override
         public String toString() {
-            return String.format("prime number[%d] = %d", index, prime);
+            return String.format("prime number[%d] = %d", index, primeNumber);
         }
     }
 }

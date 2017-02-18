@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import simple.primenumber.PrimeNumberStorage;
-import simple.primenumber.PrimeNumberStorage.Pair;
+import simple.primenumber.PrimeNumberStorage.PrimeNumberItem;
 import simple.primenumber.PrimeNumberCalculator;
 import simple.primenumber.local.LocalPrimeNumberStorage;
 import simple.primenumber.local.LocalPrimeNumberCalculator;
@@ -66,15 +66,15 @@ public class CommandLine {
                     showCommands();
                     break;
                 case LAST_PRIME_NUMBER:
-                    Pair lastPrimeNumber = storage.getLastPrimeNumber();
+                    PrimeNumberItem lastPrimeNumber = storage.getLastPrimeNumberItem();
                     System.out.printf("last %s\n", lastPrimeNumber);
                     break;
 
                 case LAST_PRIME_NUMBERS:
-                    List<Pair> lastPrimeNumbers =
-                            storage.getLastPrimeNumbers(10);
-                    for (Pair pair : lastPrimeNumbers) {
-                        System.out.println(pair);
+                    List<PrimeNumberItem> lastPrimeNumbers =
+                            storage.getLastPrimeNumberItems(10);
+                    for (PrimeNumberItem primeNumberItem : lastPrimeNumbers) {
+                        System.out.println(primeNumberItem);
                     }
                     break;
                 case RUN:

@@ -18,8 +18,8 @@ public class LocalPrimeNumberStorage implements PrimeNumberStorage {
     }
 
     @Override
-    public void addPrimeNumber(int prime) {
-        primes.add(prime);
+    public void addPrimeNumber(int primeNumber) {
+        primes.add(primeNumber);
     }
 
     @Override
@@ -33,20 +33,20 @@ public class LocalPrimeNumberStorage implements PrimeNumberStorage {
     }
 
     @Override
-    public Pair getLastPrimeNumber() {
+    public PrimeNumberItem getLastPrimeNumberItem() {
         int n = primes.size() - 1;
         int prime = primes.get(n);
-        return new Pair(n, prime);
+        return new PrimeNumberItem(n, prime);
     }
 
     @Override
-    public List<Pair> getLastPrimeNumbers(int number) {
-        List<Pair> lastPrimeNumbers = new LinkedList<>();
+    public List<PrimeNumberItem> getLastPrimeNumberItems(int number) {
+        List<PrimeNumberItem> lastPrimeNumbers = new LinkedList<>();
         int N = primes.size();
         int n = number > N ? N : number;
         for (int i = N - n; i < N; i++) {
             int prime = primes.get(i);
-            lastPrimeNumbers.add(new Pair(i, prime));
+            lastPrimeNumbers.add(new PrimeNumberItem(i, prime));
         }
         return lastPrimeNumbers;
     }
