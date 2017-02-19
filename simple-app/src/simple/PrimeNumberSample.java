@@ -1,12 +1,11 @@
 package simple;
 
+import simple.primenumber.commandline.CommandLineView;
+import simple.primenumber.PrimeNumberCalculator;
 import simple.primenumber.PrimeNumberStorage;
-import simple.primenumber.db.DBPrimeNumberStorage;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
-import java.util.List;
+import simple.primenumber.PrimeNumberView;
+import simple.primenumber.local.LocalPrimeNumberCalculator;
+import simple.primenumber.local.LocalPrimeNumberStorage;
 
 /**
  * Created by alexsch on 2/17/2017.
@@ -16,12 +15,13 @@ public class PrimeNumberSample {
 
     public static void main(String[] args) throws Exception {
 
-        PrimeNumberStorage storage = new DBPrimeNumberStorage();
-        int count = storage.getPrimNumbersCount();
-        List<Integer> primeNumbers = storage.getPrimeNumbers();
-        System.out.printf("prime numbers count: %s\n", count);
-        for (int prime : primeNumbers) {
-            System.out.printf("prime: %d\n", prime);
-        }
+        PrimeNumberStorage storage = new LocalPrimeNumberStorage();
+        //PrimeNumberStorage storage = new DBPrimeNumberStorage();
+        PrimeNumberCalculator calculator = new LocalPrimeNumberCalculator();
+        calculator.setStorage(storage);
+        PrimeNumberView view = new CommandLineView();
+        view.setStorage(storage);
+        view.setCalculator(calculator);
+        view.start();
     }
 }

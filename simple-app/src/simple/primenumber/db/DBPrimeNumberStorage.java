@@ -17,6 +17,7 @@ public class DBPrimeNumberStorage implements PrimeNumberStorage {
     private static final String TEMPLATE_PRIME_COUNT = "SELECT COUNT(%s) FROM %s";
     private static final String TEMPLATE_PRIME_NUMBERS = "SELECT * FROM %s";
     private static final String TEMPLATE_LAST_PRIME_NUMBER = "SELECT * FROM %1$s where %2$s=(select max(%2$s) from %1$s)";
+    private static final String TEMPLATE_LAST_PRIME_NUMBERS = "SELECT * FROM %s ORDER BY %s DESC FETCH FIRST %s ROWS ONLY";
 
     private static final String DB_NAME = "PrimeNumberDB";
     private static final String TABLE_NAME = "PRIME_NUMBER";
@@ -117,6 +118,19 @@ public class DBPrimeNumberStorage implements PrimeNumberStorage {
 
     @Override
     public List<PrimeNumberItem> getLastPrimeNumberItems(int number) {
-        return null;
+
+        try (ResultSet resultSet = statement.executeQuery(
+                String.format(TEMPLATE_LAST_PRIME_NUMBERS, TABLE_NAME, COLUMN_INDEX, number))) {
+
+            List<PrimeNumberItem> primeNumbers = new LinkedList<>();
+            while (resultSet.next()) {
+                int index = resultSet.getInt(COLUMN_INDEX);
+                int primeNumber = resultSet.getInt(COLUMN_PRIME);
+                primeNumbers.add(new PrimeNumberItem(index, primeNumber));
+            }
+            return primeNumbers;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

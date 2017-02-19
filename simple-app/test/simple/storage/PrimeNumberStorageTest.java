@@ -32,6 +32,7 @@ public class PrimeNumberStorageTest {
         testGoldenPrimes(primes);
 
         checkLastPrimeNumber(primes, storage.getLastPrimeNumberItem());
+        checkLastPrimeNumbers(10, storage.getLastPrimeNumberItems(10));
 
     }
 
@@ -52,6 +53,14 @@ public class PrimeNumberStorageTest {
         assertTrue(primes.get(primes.size() - 1) == primeNumberItem.getPrimeNumber(), "");
     }
 
+    private static void checkLastPrimeNumbers(int count, List<PrimeNumberStorage.PrimeNumberItem> lastPrimeNumberItems) {
+
+        if (lastPrimeNumberItems.get(0).getIndex() == 0) {
+            assertTrue(lastPrimeNumberItems.size() <= count, "Size is wrong!");
+        } else {
+            assertTrue(lastPrimeNumberItems.size() == count, "Size is wrong!");
+        }
+    }
 
     private static void assertTrue(boolean result, String message) {
         if (!result) {

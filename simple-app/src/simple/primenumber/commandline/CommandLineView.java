@@ -1,4 +1,4 @@
-package simple.comandline;
+package simple.primenumber.commandline;
 
 
 import java.util.List;
@@ -7,13 +7,12 @@ import java.util.Scanner;
 import simple.primenumber.PrimeNumberStorage;
 import simple.primenumber.PrimeNumberStorage.PrimeNumberItem;
 import simple.primenumber.PrimeNumberCalculator;
-import simple.primenumber.local.LocalPrimeNumberStorage;
-import simple.primenumber.local.LocalPrimeNumberCalculator;
+import simple.primenumber.PrimeNumberView;
 
 /**
  * Created by alexsch on 2/15/2017.
  */
-public class CommandLine {
+public class CommandLineView implements PrimeNumberView {
 
     private static final String WELCOME = "Welcome";
     private static final String GOODBYE = "Goodbye";
@@ -24,6 +23,10 @@ public class CommandLine {
     private static final String LAST_PRIME_NUMBER = "last prime number";
     private static final String LAST_PRIME_NUMBERS = "last 10 prime numbers";
 
+    private PrimeNumberStorage storage;
+    private PrimeNumberCalculator calculator;
+
+
     private static final String[] COMMANDS = {
             HELP,
             LAST_PRIME_NUMBER,
@@ -33,11 +36,19 @@ public class CommandLine {
             EXIT
     };
 
-    public static void main(String[] args) {
+    @Override
+    public void setStorage(PrimeNumberStorage storage) {
+        this.storage = storage;
+    }
 
-        PrimeNumberStorage storage = new LocalPrimeNumberStorage();
-        PrimeNumberCalculator calculator = new LocalPrimeNumberCalculator();
-        calculator.setStorage(storage);
+    @Override
+    public void setCalculator(PrimeNumberCalculator calculator) {
+        this.calculator = calculator;
+    }
+
+    @Override
+    public void start() {
+
         System.out.println(WELCOME);
         showCommands();
         Scanner in = new Scanner(System.in);
