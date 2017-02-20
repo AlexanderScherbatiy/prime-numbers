@@ -4,6 +4,7 @@ import simple.primenumber.commandline.CommandLineView;
 import simple.primenumber.PrimeNumberCalculator;
 import simple.primenumber.PrimeNumberStorage;
 import simple.primenumber.PrimeNumberView;
+import simple.primenumber.db.DBPrimeNumberStorage;
 import simple.primenumber.local.LocalPrimeNumberCalculator;
 import simple.primenumber.local.LocalPrimeNumberStorage;
 
@@ -15,8 +16,8 @@ public class PrimeNumberSample {
 
     public static void main(String[] args) throws Exception {
 
-        PrimeNumberStorage storage = new LocalPrimeNumberStorage();
-        //PrimeNumberStorage storage = new DBPrimeNumberStorage();
+        //PrimeNumberStorage storage = new LocalPrimeNumberStorage();
+        PrimeNumberStorage storage = new DBPrimeNumberStorage();
         PrimeNumberCalculator calculator = new LocalPrimeNumberCalculator();
         calculator.setStorage(storage);
         PrimeNumberView view = new CommandLineView();

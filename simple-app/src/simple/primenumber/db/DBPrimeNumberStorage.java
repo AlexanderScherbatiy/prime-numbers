@@ -28,17 +28,12 @@ public class DBPrimeNumberStorage implements PrimeNumberStorage {
     private static final String SQL_PRIME_NUMBERS = String.format(TEMPLATE_PRIME_NUMBERS, TABLE_NAME);
     private static final String SQL_LAST_PRIME_NUMBER = String.format(TEMPLATE_LAST_PRIME_NUMBER, TABLE_NAME, COLUMN_INDEX);
 
-
     private Connection connection;
-    private Statement statement;
 
     public DBPrimeNumberStorage() {
         try {
             connection = DriverManager.getConnection(DB_URL);
-            statement = connection.createStatement();
-
             initDB();
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -47,7 +42,9 @@ public class DBPrimeNumberStorage implements PrimeNumberStorage {
     private void initDB() {
         try {
             DatabaseMetaData dbmd = connection.getMetaData();
-            try (ResultSet rs = dbmd.getTables(null, null, TABLE_NAME, null)) {
+            try (
+                    Statement statement = connection.createStatement();
+                    ResultSet rs = dbmd.getTables(null, null, TABLE_NAME, null)) {
                 if (!rs.next()) {
                     statement.execute(String.format(TEMPLATE_CREATE_TABLE,
                             TABLE_NAME, COLUMN_INDEX, COLUMN_PRIME));
@@ -63,7 +60,7 @@ public class DBPrimeNumberStorage implements PrimeNumberStorage {
 
     @Override
     public void addPrimeNumber(int primeNumber) {
-        try {
+        try (Statement statement = connection.createStatement()) {
             statement.execute(String.format(TEMPLATE_INSERT_PRIME, TABLE_NAME,
                     getPrimNumbersCount(), primeNumber));
         } catch (SQLException e) {
@@ -75,7 +72,8 @@ public class DBPrimeNumberStorage implements PrimeNumberStorage {
     public List<Integer> getPrimeNumbers() {
 
         List<Integer> primeNumbers = new LinkedList<>();
-        try (ResultSet resultSet = statement.executeQuery(SQL_PRIME_NUMBERS)) {
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SQL_PRIME_NUMBERS)) {
 
             while (resultSet.next()) {
                 int index = resultSet.getInt(COLUMN_INDEX);
@@ -92,7 +90,8 @@ public class DBPrimeNumberStorage implements PrimeNumberStorage {
 
     @Override
     public int getPrimNumbersCount() {
-        try (ResultSet resultSet = statement.executeQuery(SQL_PRIME_NUMBER_COUNT)) {
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SQL_PRIME_NUMBER_COUNT)) {
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             }
@@ -104,7 +103,8 @@ public class DBPrimeNumberStorage implements PrimeNumberStorage {
 
     @Override
     public PrimeNumberItem getLastPrimeNumberItem() {
-        try (ResultSet resultSet = statement.executeQuery(SQL_LAST_PRIME_NUMBER)) {
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SQL_LAST_PRIME_NUMBER)) {
             if (resultSet.next()) {
                 int index = resultSet.getInt(COLUMN_INDEX);
                 int primeNumber = resultSet.getInt(COLUMN_PRIME);
@@ -119,8 +119,9 @@ public class DBPrimeNumberStorage implements PrimeNumberStorage {
     @Override
     public List<PrimeNumberItem> getLastPrimeNumberItems(int number) {
 
-        try (ResultSet resultSet = statement.executeQuery(
-                String.format(TEMPLATE_LAST_PRIME_NUMBERS, TABLE_NAME, COLUMN_INDEX, number))) {
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(
+                     String.format(TEMPLATE_LAST_PRIME_NUMBERS, TABLE_NAME, COLUMN_INDEX, number))) {
 
             List<PrimeNumberItem> primeNumbers = new LinkedList<>();
             while (resultSet.next()) {
